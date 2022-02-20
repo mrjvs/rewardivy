@@ -3,12 +3,13 @@ const express = require("express");
 const passport = require("passport");
 const config = require("./utils/config");
 const { sendError, errors } = require("./utils/errors");
+const { Authenticate } = require("./middleware/auth");
 
 function normalRoutes(app) {
   const router = express.Router();
-  router.use(passport.authenticate('jwt', { session: false }))
+  router.use(Authenticate)
 
-  router.use(require('./routes/data'));
+  router.use("/data", require('./routes/data'));
 
   app.use(router);
 }
@@ -31,6 +32,9 @@ async function bootstrap() {
   // error handling
   app.use(function(err, req, res, next) {
     return sendError(res, errors.UNKNOWN_ERROR);
+  });
+  app.use(function(req, res, next) {
+    return sendError(res, errors.NO_ENDPOINT);
   });
 
   // listen

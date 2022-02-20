@@ -5,22 +5,8 @@ const { User } = require('../models/User');
 const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 
-/* serialization */
-passport.serializeUser((user, done) => {
-  console.log(1)
-  done(null, user._id);
-})
-passport.deserializeUser((id, done) => {
-  console.log(2)
-  User.findById(id).then(v=> {
-    done(null, v);
-  }).catch(err => {
-    done(err);
-  })
-});
-
 /* discord strategy */
-passport.use(new Strategy(
+passport.use("discord", new Strategy(
   {
     clientID: config.discord.clientId,
     clientSecret: config.discord.clientSecret,
@@ -48,13 +34,13 @@ passport.use(new Strategy(
 
 /* jwt strategy to read session from jwt */
 passport.use(
+  "jwt",
   new JWTstrategy(
     {
       secretOrKey: config.authSecret,
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
     },
     async (token, done) => {
-      console.log("test")
       try {
         return done(null, token.user);
       } catch (error) {

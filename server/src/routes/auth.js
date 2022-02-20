@@ -23,7 +23,10 @@ router.get("/auth/discord/callback", (req, res, next) => {
           const body = { _id: user._id };
           const token = jwt.sign({ user: body }, config.authSecret);
 
-          return sendData(res, { token });
+          const url = new URL(config.clientUrl);
+          url.pathname = "/token";
+          url.searchParams.append("token", token);
+          return res.redirect(url.toString());
         }
       );
     } catch (error) {

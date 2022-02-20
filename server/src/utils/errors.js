@@ -11,6 +11,12 @@ const errors = {
     friendlyName: "Not Logged In",
     friendlyDescription: "Please login to view this data",
   },
+  NO_ENDPOINT: {
+    id: 901,
+    status: 404,
+    friendlyName: "Endpoint not recognized",
+    friendlyDescription: "This endpoint is not assigned"
+  },
 }
 
 function sendError(res, error) {
