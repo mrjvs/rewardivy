@@ -1,10 +1,12 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view />
+    <wait-wrapper>
+      <LoginView v-if="!isLoggedIn" />
+      <div v-else>
+        <SynchorizeBar />
+        <router-view />
+      </div>
+    </wait-wrapper>
   </div>
 </template>
 
@@ -30,3 +32,24 @@ nav {
   }
 }
 </style>
+
+<script>
+import SynchorizeBar from "@/components/sync/SynchorizeBar.vue";
+import LoginView from "@/views/LoginView.vue";
+import WaitWrapper from "./components/sync/WaitWrapper.vue";
+
+export default {
+  components: {
+    SynchorizeBar,
+    LoginView,
+    WaitWrapper,
+  },
+  computed: {
+    isLoggedIn() {
+      return (
+        this.$store.state.auth.token && this.$store.state.auth.token.length > 0
+      );
+    },
+  },
+};
+</script>

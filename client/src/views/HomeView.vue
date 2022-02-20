@@ -1,18 +1,23 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <p>{{ data }}</p>
+    <button @click="incrementVersion()">bump version</button>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
 export default {
-  name: "HomeView",
-  components: {
-    HelloWorld,
+  computed: {
+    data() {
+      return this.$store.getters.data;
+    },
+  },
+  methods: {
+    incrementVersion() {
+      this.$store.dispatch("incrementVersion", {
+        version: Math.floor(Math.random() * 15),
+      });
+    },
   },
 };
 </script>
